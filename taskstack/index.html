@@ -142,6 +142,8 @@
             gap: var(--spacing-md);
             margin: var(--spacing-sm) 0 var(--spacing-lg) 0;
             animation: fadeUp 1s ease-out forwards;
+            position: relative;
+            transition: filter 0.3s ease, opacity 0.3s ease;
         }
 
         @keyframes fadeUp {
@@ -159,6 +161,8 @@
         .app-screenshot {
             max-width: 100%;
             width: 100%;
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
         }
 
         .app-screenshot img {
@@ -167,7 +171,21 @@
             object-fit: cover;
             border-radius: var(--border-radius);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: background-color 0.2s ease, opacity 0.3s ease;
+        }
+
+        .app-screenshot.highlighted img {
+            transform: none;
+            box-shadow: none;
+            border: none;
+            z-index: auto;
+        }
+
+        .app-screenshot.dimmed,
+        .features.dimmed .feature {
+            opacity: 1;
+            filter: none;
+            transform: none;
         }
 
         .glass-card {
@@ -224,7 +242,7 @@
             border-bottom: none;
             border-left: none;
             border-radius: 0;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, opacity 0.3s ease;
         }
 
         .feature:last-child {
@@ -389,6 +407,108 @@
                 border-bottom: none;
             }
         }
+
+        /* Feature highlight overlay */
+        .feature-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            backdrop-filter: blur(2.5px);
+            -webkit-backdrop-filter: blur(2.5px);
+        }
+
+        .feature-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .overlay-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 90%;
+            width: 600px;
+        }
+
+        .overlay-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--accent-color);
+        }
+
+        .overlay-description {
+            font-size: 18px;
+            margin-bottom: var(--spacing-lg);
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .overlay-image {
+            max-width: 300px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px 2px var(--accent-color);
+            border: 2px solid var(--accent-color);
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease;
+        }
+
+        .feature-overlay.active .overlay-image {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .overlay-close {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            font-size: 24px;
+            color: var(--text-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: rgba(56, 182, 255, 0.2);
+            transition: background-color 0.2s ease;
+            z-index: 110;
+        }
+
+        .overlay-close:hover {
+            background-color: rgba(56, 182, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .overlay-title {
+                font-size: 24px;
+            }
+
+            .overlay-description {
+                font-size: 16px;
+                margin-bottom: var(--spacing-md);
+            }
+
+            .overlay-image {
+                max-width: 240px;
+            }
+        }
     </style>
 </head>
 
@@ -410,30 +530,30 @@
 
         <div class="app-showcase">
             <!-- App screenshots -->
-            <div class="app-screenshot">
+            <div class="app-screenshot" data-index="0">
                 <img src="website_img/1 - create_your_stacks.jpeg" alt="TaskStack App Screenshot - Create Your Stacks">
             </div>
-            <div class="app-screenshot">
+            <div class="app-screenshot" data-index="1">
                 <img src="website_img/2 - build_your_routine.jpeg" alt="TaskStack App Screenshot - Build Your Routine">
             </div>
-            <div class="app-screenshot">
+            <div class="app-screenshot" data-index="2">
                 <img src="website_img/3 - customize_your_way.jpeg" alt="TaskStack App Screenshot - Customize Your Way">
             </div>
-            <div class="app-screenshot">
+            <div class="app-screenshot" data-index="3">
                 <img src="website_img/4 - stay_on_track.jpeg" alt="TaskStack App Screenshot - Stay on Track">
             </div>
-            <div class="app-screenshot">
+            <div class="app-screenshot" data-index="4">
                 <img src="website_img/5 - visualize_your_progress.jpeg"
                     alt="TaskStack App Screenshot - Visualize Your Progress">
             </div>
-            <div class="app-screenshot">
+            <div class="app-screenshot" data-index="5">
                 <img src="website_img/6 - track_your_mood.jpeg" alt="TaskStack App Screenshot - Track Your Mood">
             </div>
-            <div class="app-screenshot">
+            <div class="app-screenshot" data-index="6">
                 <img src="website_img/7 - journal_your_journey.jpeg"
                     alt="TaskStack App Screenshot - Journal Your Journey">
             </div>
-            <div class="app-screenshot">
+            <div class="app-screenshot" data-index="7">
                 <img src="website_img/8 - view_anywhere.jpeg" alt="TaskStack App Screenshot - View Anywhere">
             </div>
         </div>
@@ -442,7 +562,7 @@
             <div class="features">
                 <!-- Feature descriptions organized in rows -->
                 <div class="feature-row">
-                    <div class="feature">
+                    <div class="feature" data-index="0">
                         <div class="feature-icon">➕</div>
                         <div class="feature-content">
                             <h3>Create Your Stacks</h3>
@@ -450,8 +570,8 @@
                                 category you choose.</p>
                         </div>
                     </div>
-                    <div class="feature">
-                        <div class="feature-icon">⚙️</div>
+                    <div class="feature" data-index="1">
+                        <div class="feature-icon">✔️</div>
                         <div class="feature-content">
                             <h3>Build Your Routine</h3>
                             <p>Add tasks with custom goals, requirements, and reminders to build a system that fits
@@ -460,7 +580,7 @@
                     </div>
                 </div>
                 <div class="feature-row">
-                    <div class="feature">
+                    <div class="feature" data-index="2">
                         <div class="feature-icon">🎨</div>
                         <div class="feature-content">
                             <h3>Customize Your Way</h3>
@@ -468,7 +588,7 @@
                                 reorder items to fit your workflow.</p>
                         </div>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-index="3">
                         <div class="feature-icon">📊</div>
                         <div class="feature-content">
                             <h3>Stay on Track With Insight</h3>
@@ -478,7 +598,7 @@
                     </div>
                 </div>
                 <div class="feature-row">
-                    <div class="feature">
+                    <div class="feature" data-index="4">
                         <div class="feature-icon">📈</div>
                         <div class="feature-content">
                             <h3>Visualize Your Progress</h3>
@@ -486,7 +606,7 @@
                                 over time.</p>
                         </div>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-index="5">
                         <div class="feature-icon">😊</div>
                         <div class="feature-content">
                             <h3>Track Your Mood</h3>
@@ -496,7 +616,7 @@
                     </div>
                 </div>
                 <div class="feature-row">
-                    <div class="feature">
+                    <div class="feature" data-index="6">
                         <div class="feature-icon">📝</div>
                         <div class="feature-content">
                             <h3>Journal Your Journey</h3>
@@ -504,7 +624,7 @@
                                 entries by mood or favorites.</p>
                         </div>
                     </div>
-                    <div class="feature">
+                    <div class="feature" data-index="7">
                         <div class="feature-icon">📱</div>
                         <div class="feature-content">
                             <h3>View Anywhere, Edit Anytime</h3>
@@ -527,6 +647,91 @@
             <a href="terms/">Terms of Use</a>
         </p>
     </footer>
+
+    <!-- Add overlay container -->
+    <div class="feature-overlay">
+        <button class="overlay-close">×</button>
+        <div class="overlay-content">
+            <h2 class="overlay-title"></h2>
+            <p class="overlay-description"></p>
+            <img class="overlay-image" src="" alt="Feature preview">
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const features = document.querySelectorAll('.feature');
+            const screenshots = document.querySelectorAll('.app-screenshot');
+            const overlay = document.querySelector('.feature-overlay');
+            const overlayTitle = document.querySelector('.overlay-title');
+            const overlayDescription = document.querySelector('.overlay-description');
+            const overlayImage = document.querySelector('.overlay-image');
+            const closeButton = document.querySelector('.overlay-close');
+
+            // Function to show overlay with feature details
+            const showFeatureOverlay = (feature, screenshot) => {
+                const title = feature.querySelector('h3').textContent;
+                const description = feature.querySelector('p').textContent;
+                const imageSrc = screenshot.querySelector('img').src;
+
+                overlayTitle.textContent = title;
+                overlayDescription.textContent = description;
+                overlayImage.src = imageSrc;
+                overlayImage.alt = title;
+
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            };
+
+            // Function to hide overlay
+            const hideOverlay = () => {
+                overlay.classList.remove('active');
+                document.body.style.overflow = ''; // Restore scrolling
+            };
+
+            // Add click event to features
+            features.forEach(feature => {
+                const index = feature.getAttribute('data-index');
+                const targetScreenshot = document.querySelector(`.app-screenshot[data-index="${index}"]`);
+
+                if (!targetScreenshot) return;
+
+                feature.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showFeatureOverlay(feature, targetScreenshot);
+                });
+
+                // Optional: For desktop, you can keep hover effect for preview
+                feature.addEventListener('mouseenter', () => {
+                    screenshots.forEach(s => s.classList.remove('highlighted'));
+                    targetScreenshot.classList.add('highlighted');
+                });
+
+                feature.addEventListener('mouseleave', () => {
+                    targetScreenshot.classList.remove('highlighted');
+                });
+            });
+
+            // Close overlay when clicking close button
+            if (closeButton) {
+                closeButton.addEventListener('click', hideOverlay);
+            }
+
+            // Close overlay when clicking outside content
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    hideOverlay();
+                }
+            });
+
+            // Close overlay with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    hideOverlay();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
